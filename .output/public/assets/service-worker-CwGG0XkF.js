@@ -1,1 +1,0 @@
-export{t as FastResponse,n as FastURL,r as serve}from"./service-worker-B3L-MCpX.js";

@@ -1,1 +1,0 @@
-import{G as e}from"./common-CrXoaQRc.js";function t(){if(!e)throw Error("The `bun` builder requires the Bun runtime. Run Nitro with Bun (e.g. `bun --bun nitro build`) or use another builder.")}export{t};

@@ -1,1 +1,0 @@
-import{$ as e,Xt as t}from"./common-CrXoaQRc.js";var n=(await e({id:`jiti`,dir:process.cwd(),reason:`loading config files this runtime cannot import natively`,version:t.jiti.version})).createJiti;export{n as createJiti};

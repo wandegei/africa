@@ -1,1 +1,0 @@
-import{$ as e,Xt as t}from"./common-CrXoaQRc.js";var n=(await e({id:`dotenv`,dir:process.cwd(),reason:"parsing `.env` files (`node:util.parseEnv` is not available in this runtime)",version:t.dotenv.version})).parse;export{n as parse};
