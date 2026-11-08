@@ -1,0 +1,1 @@
+export{a as parseJSON5}from"./confbox-CgHuauEs.js";

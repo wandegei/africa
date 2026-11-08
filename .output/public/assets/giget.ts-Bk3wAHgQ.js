@@ -1,0 +1,1 @@
+import{$ as e,Xt as t}from"./common-CrXoaQRc.js";var n=(await e({id:`giget`,dir:process.cwd(),reason:`extending the config from a remote template`,version:t.giget.version})).downloadTemplate;export{n as downloadTemplate};

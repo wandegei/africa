@@ -1,0 +1,44 @@
+import { o } from "./env-runner4.mjs";
+import { s } from "./env-runner8.mjs";
+import { fileURLToPath } from "node:url";
+// node_modules/env-runner/dist/_chunks/netlify-runner.mjs
+var r;
+var i = class extends s {
+	constructor(e) {
+		let t = a(e.netlifyRuntime);
+		super({
+			...e,
+			workerEntry: e.workerEntry || (r ||= fileURLToPath(import.meta.resolve(`env-runner/runners/netlify/worker`))),
+			data: t === void 0 ? e.data : {
+				...e.data,
+				netlifyRuntime: t
+			}
+		});
+	}
+	async fetch(e, t) {
+		e = this._resolveFetchInput(e);
+		let n = new Headers(e instanceof Request ? e.headers : t?.headers), r = n.get(`x-forwarded-for`)?.split(`,`)[0]?.trim() || n.get(`x-real-ip`) || `127.0.0.1`;
+		n.has(`x-nf-client-connection-ip`) || n.set(`x-nf-client-connection-ip`, r), n.has(`x-nf-account-id`) || n.set(`x-nf-account-id`, `0`), n.has(`x-nf-site-id`) || n.set(`x-nf-site-id`, `0`), n.has(`x-nf-deploy-id`) || n.set(`x-nf-deploy-id`, `0`), n.has(`x-nf-deploy-context`) || n.set(`x-nf-deploy-context`, `dev`), n.has(`x-nf-geo`) || n.set(`x-nf-geo`, btoa(JSON.stringify({
+			city: `localhost`,
+			country: { code: `dev` }
+		}))), n.has(`x-nf-request-id`) || n.set(`x-nf-request-id`, crypto.randomUUID()), n.has(`x-forwarded-for`) || n.set(`x-forwarded-for`, r), n.has(`x-real-ip`) || n.set(`x-real-ip`, r);
+		try {
+			let t = new URL(e instanceof Request ? e.url : e.toString());
+			n.has(`x-forwarded-proto`) || n.set(`x-forwarded-proto`, t.protocol.replace(`:`, ``)), n.has(`x-forwarded-host`) || n.set(`x-forwarded-host`, n.get(`host`) || t.host);
+		} catch {}
+		return e instanceof Request ? super.fetch(new Request(e, {
+			...t,
+			headers: n
+		})) : super.fetch(e, {
+			...t,
+			headers: n
+		});
+	}
+	_runtimeType() {
+		return `netlify`;
+	}
+};
+function a(t) {
+	return o(t, `netlifyRuntime`);
+}
+export { i };

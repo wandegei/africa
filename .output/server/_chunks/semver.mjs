@@ -1,0 +1,538 @@
+import { __commonJSMin } from "../_common.mjs";
+// node_modules/nitro/dist/_libs/semver.mjs
+var t = __commonJSMin(((e, t) => {
+	t.exports = class {
+		constructor() {
+			this.max = 1e3, this.map = /* @__PURE__ */ new Map();
+		}
+		get(e) {
+			let t = this.map.get(e);
+			if (t !== void 0) return this.map.delete(e), this.map.set(e, t), t;
+		}
+		delete(e) {
+			return this.map.delete(e);
+		}
+		set(e, t) {
+			if (!this.delete(e) && t !== void 0) {
+				if (this.map.size >= this.max) {
+					let e = this.map.keys().next().value;
+					this.delete(e);
+				}
+				this.map.set(e, t);
+			}
+			return this;
+		}
+	};
+}));
+var n = __commonJSMin(((e, t) => {
+	let n = Object.freeze({ loose: !0 }), r = Object.freeze({});
+	t.exports = (e) => e ? typeof e == `object` ? e : n : r;
+}));
+var r = __commonJSMin(((e, t) => {
+	t.exports = {
+		MAX_LENGTH: 256,
+		MAX_SAFE_COMPONENT_LENGTH: 16,
+		MAX_SAFE_BUILD_LENGTH: 250,
+		MAX_SAFE_INTEGER: 2 ** 53 - 1 || 9007199254740991,
+		WHITESPACE_CHARACTERS: [
+			`	`,
+			`
+`,
+			`\v`,
+			`\f`,
+			`\r`,
+			` `,
+			`\xA0`,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			` `,
+			`\u2028`,
+			`\u2029`,
+			` `,
+			` `,
+			`　`,
+			`﻿`
+		],
+		RELEASE_TYPES: [
+			`major`,
+			`premajor`,
+			`minor`,
+			`preminor`,
+			`patch`,
+			`prepatch`,
+			`prerelease`
+		],
+		SEMVER_SPEC_VERSION: `2.0.0`,
+		FLAG_INCLUDE_PRERELEASE: 1,
+		FLAG_LOOSE: 2
+	};
+}));
+var i = __commonJSMin(((e, t) => {
+	t.exports = typeof process == `object` && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? (...e) => console.error(`SEMVER`, ...e) : () => {};
+}));
+var a = __commonJSMin(((e, t) => {
+	let { MAX_SAFE_COMPONENT_LENGTH: n, MAX_SAFE_BUILD_LENGTH: a, MAX_LENGTH: o } = r(), s = i();
+	e = t.exports = {};
+	let c = e.re = [], l = e.safeRe = [], u = e.src = [], d = e.safeSrc = [], f = e.t = {}, p = 0, m = `[a-zA-Z0-9-]`, h = [
+		[`\\s`, 1],
+		[`\\d`, o],
+		[m, a]
+	], g = (e) => {
+		for (let [t, n] of h) e = e.split(`${t}*`).join(`${t}{0,${n}}`).split(`${t}+`).join(`${t}{1,${n}}`);
+		return e;
+	}, _ = (e, t, n) => {
+		let r = g(t), i = p++;
+		s(e, i, t), f[e] = i, u[i] = t, d[i] = r, c[i] = new RegExp(t, n ? `g` : void 0), l[i] = new RegExp(r, n ? `g` : void 0);
+	};
+	_(`NUMERICIDENTIFIER`, `0|[1-9]\\d*`), _(`NUMERICIDENTIFIERLOOSE`, `\\d+`), _(`NONNUMERICIDENTIFIER`, `\\d*[a-zA-Z-]${m}*`), _(`MAINVERSION`, `(${u[f.NUMERICIDENTIFIER]})\\.(${u[f.NUMERICIDENTIFIER]})\\.(${u[f.NUMERICIDENTIFIER]})`), _(`MAINVERSIONLOOSE`, `(${u[f.NUMERICIDENTIFIERLOOSE]})\\.(${u[f.NUMERICIDENTIFIERLOOSE]})\\.(${u[f.NUMERICIDENTIFIERLOOSE]})`), _(`PRERELEASEIDENTIFIER`, `(?:${u[f.NONNUMERICIDENTIFIER]}|${u[f.NUMERICIDENTIFIER]})`), _(`PRERELEASEIDENTIFIERLOOSE`, `(?:${u[f.NONNUMERICIDENTIFIER]}|${u[f.NUMERICIDENTIFIERLOOSE]})`), _(`PRERELEASE`, `(?:-(${u[f.PRERELEASEIDENTIFIER]}(?:\\.${u[f.PRERELEASEIDENTIFIER]})*))`), _(`PRERELEASELOOSE`, `(?:-?(${u[f.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${u[f.PRERELEASEIDENTIFIERLOOSE]})*))`), _(`BUILDIDENTIFIER`, `${m}+`), _(`BUILD`, `(?:\\+(${u[f.BUILDIDENTIFIER]}(?:\\.${u[f.BUILDIDENTIFIER]})*))`), _(`FULLPLAIN`, `v?${u[f.MAINVERSION]}${u[f.PRERELEASE]}?${u[f.BUILD]}?`), _(`FULL`, `^${u[f.FULLPLAIN]}$`), _(`LOOSEPLAIN`, `[v=\\s]*${u[f.MAINVERSIONLOOSE]}${u[f.PRERELEASELOOSE]}?${u[f.BUILD]}?`), _(`LOOSE`, `^${u[f.LOOSEPLAIN]}$`), _(`GTLT`, `((?:<|>)?=?)`), _(`XRANGEIDENTIFIERLOOSE`, `${u[f.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`), _(`XRANGEIDENTIFIER`, `${u[f.NUMERICIDENTIFIER]}|x|X|\\*`), _(`XRANGEPLAIN`, `[v=\\s]*(${u[f.XRANGEIDENTIFIER]})(?:\\.(${u[f.XRANGEIDENTIFIER]})(?:\\.(${u[f.XRANGEIDENTIFIER]})(?:${u[f.PRERELEASE]})?${u[f.BUILD]}?)?)?`), _(`XRANGEPLAINLOOSE`, `[v=\\s]*(${u[f.XRANGEIDENTIFIERLOOSE]})(?:\\.(${u[f.XRANGEIDENTIFIERLOOSE]})(?:\\.(${u[f.XRANGEIDENTIFIERLOOSE]})(?:${u[f.PRERELEASELOOSE]})?${u[f.BUILD]}?)?)?`), _(`XRANGE`, `^${u[f.GTLT]}\\s*${u[f.XRANGEPLAIN]}$`), _(`XRANGELOOSE`, `^${u[f.GTLT]}\\s*${u[f.XRANGEPLAINLOOSE]}$`), _(`COERCEPLAIN`, `(^|[^\\d])(\\d{1,${n}})(?:\\.(\\d{1,${n}}))?(?:\\.(\\d{1,${n}}))?`), _(`COERCE`, `${u[f.COERCEPLAIN]}(?:$|[^\\d])`), _(`COERCEFULL`, u[f.COERCEPLAIN] + `(?:${u[f.PRERELEASE]})?(?:${u[f.BUILD]})?(?:$|[^\\d])`), _(`COERCERTL`, u[f.COERCE], !0), _(`COERCERTLFULL`, u[f.COERCEFULL], !0), _(`LONETILDE`, `(?:~>?)`), _(`TILDETRIM`, `(\\s*)${u[f.LONETILDE]}\\s+`, !0), e.tildeTrimReplace = `$1~`, _(`TILDE`, `^${u[f.LONETILDE]}${u[f.XRANGEPLAIN]}$`), _(`TILDELOOSE`, `^${u[f.LONETILDE]}${u[f.XRANGEPLAINLOOSE]}$`), _(`LONECARET`, `(?:\\^)`), _(`CARETTRIM`, `(\\s*)${u[f.LONECARET]}\\s+`, !0), e.caretTrimReplace = `$1^`, _(`CARET`, `^${u[f.LONECARET]}${u[f.XRANGEPLAIN]}$`), _(`CARETLOOSE`, `^${u[f.LONECARET]}${u[f.XRANGEPLAINLOOSE]}$`), _(`COMPARATORLOOSE`, `^${u[f.GTLT]}\\s*(${u[f.LOOSEPLAIN]})$|^$`), _(`COMPARATOR`, `^${u[f.GTLT]}\\s*(${u[f.FULLPLAIN]})$|^$`), _(`COMPARATORTRIM`, `(\\s*)${u[f.GTLT]}\\s*(${u[f.LOOSEPLAIN]}|${u[f.XRANGEPLAIN]})`, !0), e.comparatorTrimReplace = `$1$2$3`, _(`HYPHENRANGE`, `^\\s*(${u[f.XRANGEPLAIN]})\\s+-\\s+(${u[f.XRANGEPLAIN]})\\s*$`), _(`HYPHENRANGELOOSE`, `^\\s*(${u[f.XRANGEPLAINLOOSE]})\\s+-\\s+(${u[f.XRANGEPLAINLOOSE]})\\s*$`), _(`STAR`, `(<|>)?=?\\s*\\*`), _(`GTE0`, `^\\s*>=\\s*0\\.0\\.0\\s*$`), _(`GTE0PRE`, `^\\s*>=\\s*0\\.0\\.0-0\\s*$`);
+}));
+var o = __commonJSMin(((e, t) => {
+	let n = /^[0-9]+$/, r = (e, t) => {
+		if (typeof e == `number` && typeof t == `number`) return e === t ? 0 : e < t ? -1 : 1;
+		let r = n.test(e), i = n.test(t);
+		return r && i && (e = +e, t = +t), e === t ? 0 : r && !i ? -1 : i && !r ? 1 : e < t ? -1 : 1;
+	};
+	t.exports = {
+		compareIdentifiers: r,
+		rcompareIdentifiers: (e, t) => r(t, e)
+	};
+}));
+var s = __commonJSMin(((e, t) => {
+	let s = i(), { MAX_LENGTH: c, MAX_SAFE_INTEGER: l } = r(), { safeRe: u, t: d } = a(), f = n(), { compareIdentifiers: p } = o(), m = (e, t) => {
+		let n = t.split(`.`);
+		if (n.length > e.length) return !1;
+		for (let t = 0; t < n.length; t++) if (p(e[t], n[t]) !== 0) return !1;
+		return !0;
+	};
+	t.exports = class e {
+		constructor(t, n) {
+			if (n = f(n), t instanceof e) {
+				if (t.loose === !!n.loose && t.includePrerelease === !!n.includePrerelease) return t;
+				t = t.version;
+			} else if (typeof t != `string`) throw TypeError(`Invalid version. Must be a string. Got type "${typeof t}".`);
+			if (t.length > c) throw TypeError(`version is longer than ${c} characters`);
+			s(`SemVer`, t, n), this.options = n, this.loose = !!n.loose, this.includePrerelease = !!n.includePrerelease;
+			let r = t.trim().match(n.loose ? u[d.LOOSE] : u[d.FULL]);
+			if (!r) throw TypeError(`Invalid Version: ${t}`);
+			if (this.raw = t, this.major = +r[1], this.minor = +r[2], this.patch = +r[3], this.major > l || this.major < 0) throw TypeError(`Invalid major version`);
+			if (this.minor > l || this.minor < 0) throw TypeError(`Invalid minor version`);
+			if (this.patch > l || this.patch < 0) throw TypeError(`Invalid patch version`);
+			this.prerelease = r[4] ? r[4].split(`.`).map((e) => {
+				if (/^[0-9]+$/.test(e)) {
+					let t = +e;
+					if (t >= 0 && t < l) return t;
+				}
+				return e;
+			}) : [], this.build = r[5] ? r[5].split(`.`) : [], this.format();
+		}
+		format() {
+			return this.version = `${this.major}.${this.minor}.${this.patch}`, this.prerelease.length && (this.version += `-${this.prerelease.join(`.`)}`), this.version;
+		}
+		toString() {
+			return this.version;
+		}
+		compare(t) {
+			if (s(`SemVer.compare`, this.version, this.options, t), !(t instanceof e)) {
+				if (typeof t == `string` && t === this.version) return 0;
+				t = new e(t, this.options);
+			}
+			return t.version === this.version ? 0 : this.compareMain(t) || this.comparePre(t);
+		}
+		compareMain(t) {
+			return t instanceof e || (t = new e(t, this.options)), this.major < t.major ? -1 : this.major > t.major ? 1 : this.minor < t.minor ? -1 : this.minor > t.minor ? 1 : this.patch < t.patch ? -1 : +(this.patch > t.patch);
+		}
+		comparePre(t) {
+			if (t instanceof e || (t = new e(t, this.options)), this.prerelease.length && !t.prerelease.length) return -1;
+			if (!this.prerelease.length && t.prerelease.length) return 1;
+			if (!this.prerelease.length && !t.prerelease.length) return 0;
+			let n = 0;
+			do {
+				let e = this.prerelease[n], r = t.prerelease[n];
+				if (s(`prerelease compare`, n, e, r), e === void 0 && r === void 0) return 0;
+				if (r === void 0) return 1;
+				if (e === void 0) return -1;
+				if (e !== r) return p(e, r);
+			} while (++n);
+		}
+		compareBuild(t) {
+			t instanceof e || (t = new e(t, this.options));
+			let n = 0;
+			do {
+				let e = this.build[n], r = t.build[n];
+				if (s(`build compare`, n, e, r), e === void 0 && r === void 0) return 0;
+				if (r === void 0) return 1;
+				if (e === void 0) return -1;
+				if (e !== r) return p(e, r);
+			} while (++n);
+		}
+		inc(e, t, n) {
+			if (e.startsWith(`pre`)) {
+				if (!t && n === !1) throw Error(`invalid increment argument: identifier is empty`);
+				if (t) {
+					let e = `-${t}`.match(this.options.loose ? u[d.PRERELEASELOOSE] : u[d.PRERELEASE]);
+					if (!e || e[1] !== t) throw Error(`invalid identifier: ${t}`);
+				}
+			}
+			switch (e) {
+				case `premajor`:
+					this.prerelease.length = 0, this.patch = 0, this.minor = 0, this.major++, this.inc(`pre`, t, n);
+					break;
+				case `preminor`:
+					this.prerelease.length = 0, this.patch = 0, this.minor++, this.inc(`pre`, t, n);
+					break;
+				case `prepatch`:
+					this.prerelease.length = 0, this.inc(`patch`, t, n), this.inc(`pre`, t, n);
+					break;
+				case `prerelease`:
+					this.prerelease.length === 0 && this.inc(`patch`, t, n), this.inc(`pre`, t, n);
+					break;
+				case `release`:
+					if (this.prerelease.length === 0) throw Error(`version ${this.raw} is not a prerelease`);
+					this.prerelease.length = 0;
+					break;
+				case `major`:
+					(this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) && this.major++, this.minor = 0, this.patch = 0, this.prerelease = [];
+					break;
+				case `minor`:
+					(this.patch !== 0 || this.prerelease.length === 0) && this.minor++, this.patch = 0, this.prerelease = [];
+					break;
+				case `patch`:
+					this.prerelease.length === 0 && this.patch++, this.prerelease = [];
+					break;
+				case `pre`: {
+					let e = +!!Number(n);
+					if (this.prerelease.length === 0) this.prerelease = [e];
+					else {
+						let r = this.prerelease.length;
+						for (; --r >= 0;) typeof this.prerelease[r] == `number` && (this.prerelease[r]++, r = -2);
+						if (r === -1) {
+							if (t === this.prerelease.join(`.`) && n === !1) throw Error(`invalid increment argument: identifier already exists`);
+							this.prerelease.push(e);
+						}
+					}
+					if (t) {
+						let r = [t, e];
+						if (n === !1 && (r = [t]), m(this.prerelease, t)) {
+							let e = this.prerelease[t.split(`.`).length];
+							isNaN(e) && (this.prerelease = r);
+						} else this.prerelease = r;
+					}
+					break;
+				}
+				default: throw Error(`invalid increment argument: ${e}`);
+			}
+			return this.raw = this.format(), this.build.length && (this.raw += `+${this.build.join(`.`)}`), this;
+		}
+	};
+}));
+var c = __commonJSMin(((e, t) => {
+	let n = s();
+	t.exports = (e, t, r) => new n(e, r).compare(new n(t, r));
+}));
+var l = __commonJSMin(((e, t) => {
+	let n = c();
+	t.exports = (e, t, r) => n(e, t, r) === 0;
+}));
+var u = __commonJSMin(((e, t) => {
+	let n = c();
+	t.exports = (e, t, r) => n(e, t, r) !== 0;
+}));
+var d = __commonJSMin(((e, t) => {
+	let n = c();
+	t.exports = (e, t, r) => n(e, t, r) > 0;
+}));
+var f = __commonJSMin(((e, t) => {
+	let n = c();
+	t.exports = (e, t, r) => n(e, t, r) >= 0;
+}));
+var p = __commonJSMin(((e, t) => {
+	let n = c();
+	t.exports = (e, t, r) => n(e, t, r) < 0;
+}));
+var m = __commonJSMin(((e, t) => {
+	let n = c();
+	t.exports = (e, t, r) => n(e, t, r) <= 0;
+}));
+var h = __commonJSMin(((e, t) => {
+	let n = l(), r = u(), i = d(), a = f(), o = p(), s = m();
+	t.exports = (e, t, c, l) => {
+		switch (t) {
+			case `===`: return typeof e == `object` && (e = e.version), typeof c == `object` && (c = c.version), e === c;
+			case `!==`: return typeof e == `object` && (e = e.version), typeof c == `object` && (c = c.version), e !== c;
+			case ``:
+			case `=`:
+			case `==`: return n(e, c, l);
+			case `!=`: return r(e, c, l);
+			case `>`: return i(e, c, l);
+			case `>=`: return a(e, c, l);
+			case `<`: return o(e, c, l);
+			case `<=`: return s(e, c, l);
+			default: throw TypeError(`Invalid operator: ${t}`);
+		}
+	};
+}));
+var g = __commonJSMin(((e, t) => {
+	let r = Symbol(`SemVer ANY`);
+	t.exports = class e {
+		static get ANY() {
+			return r;
+		}
+		constructor(t, n) {
+			if (n = o(n), t instanceof e) {
+				if (t.loose === !!n.loose) return t;
+				t = t.value;
+			}
+			t = t.trim().split(/\s+/).join(` `), d(`comparator`, t, n), this.options = n, this.loose = !!n.loose, this.parse(t), this.value = this.semver === r ? `` : this.operator + this.semver.version, d(`comp`, this);
+		}
+		parse(e) {
+			let t = this.options.loose ? c[l.COMPARATORLOOSE] : c[l.COMPARATOR], n = e.match(t);
+			if (!n) throw TypeError(`Invalid comparator: ${e}`);
+			this.operator = n[1] === void 0 ? `` : n[1], this.operator === `=` && (this.operator = ``), this.semver = n[2] ? new f(n[2], this.options.loose) : r;
+		}
+		toString() {
+			return this.value;
+		}
+		test(e) {
+			if (d(`Comparator.test`, e, this.options.loose), this.semver === r || e === r) return !0;
+			if (typeof e == `string`) try {
+				e = new f(e, this.options);
+			} catch {
+				return !1;
+			}
+			return u(e, this.operator, this.semver, this.options);
+		}
+		intersects(t, n) {
+			if (!(t instanceof e)) throw TypeError(`a Comparator is required`);
+			return this.operator === `` ? this.value === `` || new p(t.value, n).test(this.value) : t.operator === `` ? t.value === `` || new p(this.value, n).test(t.semver) : (n = o(n), n.includePrerelease && (this.value === `<0.0.0-0` || t.value === `<0.0.0-0`) || !n.includePrerelease && (this.value.startsWith(`<0.0.0`) || t.value.startsWith(`<0.0.0`)) ? !1 : !!(this.operator.startsWith(`>`) && t.operator.startsWith(`>`) || this.operator.startsWith(`<`) && t.operator.startsWith(`<`) || this.semver.version === t.semver.version && this.operator.includes(`=`) && t.operator.includes(`=`) || u(this.semver, `<`, t.semver, n) && this.operator.startsWith(`>`) && t.operator.startsWith(`<`) || u(this.semver, `>`, t.semver, n) && this.operator.startsWith(`<`) && t.operator.startsWith(`>`)));
+		}
+	};
+	let o = n(), { safeRe: c, t: l } = a(), u = h(), d = i(), f = s(), p = v();
+}));
+var _ = __commonJSMin(((e, t) => {
+	let { MAX_LENGTH: n, MAX_SAFE_BUILD_LENGTH: i, WHITESPACE_CHARACTERS: a } = r(), o = /* @__PURE__ */ new Uint8Array(65536);
+	for (let e of a) o[e.charCodeAt(0)] = 1;
+	let s = (e) => e !== void 0 && o[e.charCodeAt(0)] === 1, c = (e) => e === `v` || e === `=` || s(e), l = (e) => e !== void 0 && e >= `0` && e <= `9`, u = (e) => e !== void 0 && (e >= `a` && e <= `z` || e >= `A` && e <= `Z`), d = (e) => l(e) || u(e) || e === `-`, f = (e) => l(e) || e === `x` || e === `X` || e === `*`, p = (e, t, n, r) => {
+		if (!l(e[t])) return t;
+		if (t >= r.start && t < r.end) return Math.min(t + n, r.end);
+		if (t >= r.previousStart && t < r.previousEnd) return Math.min(t + n, r.previousEnd);
+		let i = t + 1;
+		for (; l(e[i]);) i++;
+		return r.previousStart = r.start, r.previousEnd = r.end, r.start = t, r.end = i, Math.min(t + n, i);
+	}, m = (e, t, r, i) => !r && e[t] === `0` ? t + 1 : p(e, t, r ? n : n + 1, i), h = (e, t, r, a) => {
+		let o = p(e, t, n, a);
+		if (u(e[o]) || e[o] === `-`) {
+			let t = o + 1, n = t + i;
+			for (; t < n && d(e[t]);) t++;
+			return t;
+		}
+		return m(e, t, r, a);
+	}, g = (e, t, n, r) => {
+		let i = e[t] === `-`;
+		if (!n && !i) return t;
+		let a = t + +!!i, o = h(e, a, n, r);
+		if (o === a) {
+			if (!n || !i) return t;
+			o = h(e, t, n, r);
+		}
+		for (; e[o] === `.`;) {
+			let t = h(e, o + 1, n, r);
+			if (t === o + 1) break;
+			o = t;
+		}
+		return o;
+	}, _ = (e, t) => {
+		let n = t;
+		for (; n - t < i && d(e[n]);) n++;
+		return n;
+	}, v = (e, t) => {
+		if (e[t] !== `+`) return t;
+		let n = _(e, t + 1);
+		if (n === t + 1) return t;
+		for (; e[n] === `.`;) {
+			let t = _(e, n + 1);
+			if (t === n + 1) break;
+			n = t;
+		}
+		return n;
+	}, y = (e, t, n) => {
+		let r = t;
+		for (let i = 0; i < 3; i++) {
+			let a = m(e, r, !0, n);
+			if (a === r) return t;
+			if (r = a, i < 2) {
+				if (e[r] !== `.`) return t;
+				r++;
+			}
+		}
+		let i = g(e, r, !0, n);
+		return v(e, i);
+	}, b = (e, t, n) => l(e[t]) ? m(e, t, !1, n) : f(e[t]) ? t + 1 : t, x = (e, t, n) => {
+		let r = b(e, t, n);
+		for (let t = 0; t < 2; t++) {
+			if (e[r] !== `.`) return r;
+			let t = b(e, r + 1, n);
+			if (t === r + 1) return r;
+			r = t;
+		}
+		let i = g(e, r, !1, n);
+		return v(e, i);
+	}, S = (e, t, n) => {
+		let r = y(e, t, n);
+		return r === t ? x(e, t, n) : r;
+	}, C = (e, t) => {
+		let n = t;
+		return s(e[n]) && n++, (e[n] === `<` || e[n] === `>`) && n++, e[n] === `=` && n++, s(e[n]) ? n : -1;
+	};
+	t.exports = (e) => {
+		let t = ``, n = 0, r = 0, i = {
+			start: -1,
+			end: -1,
+			previousStart: -1,
+			previousEnd: -1
+		};
+		for (; r < e.length;) {
+			let a = r;
+			if (e[r] === `<` || e[r] === `>`) r++;
+			else if (!c(e[r]) && !f(e[r])) {
+				r++;
+				continue;
+			}
+			for (; r < e.length && c(e[r]);) r++;
+			if (!f(e[r])) continue;
+			let o = C(e, a);
+			o !== -1 && (t += e.slice(n, o), n = o + 1), r = S(e, r, i);
+		}
+		return t + e.slice(n);
+	};
+}));
+var v = __commonJSMin(((e, o) => {
+	let c = /\s+/g;
+	o.exports = class e {
+		constructor(t, n) {
+			if (n = u(n), t instanceof e) return t.loose === !!n.loose && t.includePrerelease === !!n.includePrerelease ? t : new e(t.raw, n);
+			if (t instanceof d) return this.raw = t.value, this.set = [[t]], this.formatted = void 0, this;
+			if (this.options = n, this.loose = !!n.loose, this.includePrerelease = !!n.includePrerelease, this.raw = t.trim().replace(c, ` `), this.set = this.raw.split(`||`).map((e) => this.parseRange(e.trim())).filter((e) => e.length), !this.set.length) throw TypeError(`Invalid SemVer Range: ${this.raw}`);
+			if (this.set.length > 1) {
+				let e = this.set[0];
+				if (this.set = this.set.filter((e) => !T(e[0])), this.set.length === 0) this.set = [e];
+				else if (this.set.length > 1) {
+					for (let e of this.set) if (e.length === 1 && E(e[0])) {
+						this.set = [e];
+						break;
+					}
+				}
+			}
+			this.formatted = void 0;
+		}
+		get range() {
+			if (this.formatted === void 0) {
+				this.formatted = ``;
+				for (let e = 0; e < this.set.length; e++) {
+					e > 0 && (this.formatted += `||`);
+					let t = this.set[e];
+					for (let e = 0; e < t.length; e++) e > 0 && (this.formatted += ` `), this.formatted += t[e].toString().trim();
+				}
+			}
+			return this.formatted;
+		}
+		format() {
+			return this.range;
+		}
+		toString() {
+			return this.range;
+		}
+		parseRange(e) {
+			e = e.replace(w, ``);
+			let t = ((this.options.includePrerelease && S) | (this.options.loose && C)) + `:` + e, n = l.get(t);
+			if (n) return n;
+			let r = this.options.loose, i = r ? h[y.HYPHENRANGELOOSE] : h[y.HYPHENRANGE];
+			e = e.replace(i, z(this.options.includePrerelease)), f(`hyphen replace`, e), e = m(e), f(`comparator trim`, e), e = e.replace(h[y.TILDETRIM], b), f(`tilde trim`, e), e = e.replace(h[y.CARETTRIM], x), f(`caret trim`, e);
+			let a = e.split(` `).map((e) => O(e, this.options)).join(` `).split(/\s+/).map((e) => R(e, this.options));
+			r && (a = a.filter((e) => (f(`loose invalid filter`, e, this.options), !!e.match(h[y.COMPARATORLOOSE])))), f(`range list`, a);
+			let o = /* @__PURE__ */ new Map(), s = a.map((e) => new d(e, this.options));
+			for (let e of s) {
+				if (T(e)) return [e];
+				o.set(e.value, e);
+			}
+			o.size > 1 && o.has(``) && o.delete(``);
+			let c = [...o.values()];
+			return l.set(t, c), c;
+		}
+		intersects(t, n) {
+			if (!(t instanceof e)) throw TypeError(`a Range is required`);
+			return this.set.some((e) => D(e, n) && t.set.some((t) => D(t, n) && e.every((e) => t.every((t) => e.intersects(t, n)))));
+		}
+		test(e) {
+			if (!e) return !1;
+			if (typeof e == `string`) try {
+				e = new p(e, this.options);
+			} catch {
+				return !1;
+			}
+			for (let t = 0; t < this.set.length; t++) if (B(this.set[t], e, this.options)) return !0;
+			return !1;
+		}
+	};
+	let l = new (t())(), u = n(), d = g(), f = i(), p = s(), m = _(), { safeRe: h, src: v, t: y, tildeTrimReplace: b, caretTrimReplace: x } = a(), { FLAG_INCLUDE_PRERELEASE: S, FLAG_LOOSE: C } = r(), w = new RegExp(v[y.BUILD], `g`), T = (e) => e.value === `<0.0.0-0`, E = (e) => e.value === ``, D = (e, t) => {
+		let n = !0, r = e.slice(), i = r.pop();
+		for (; n && r.length;) n = r.every((e) => i.intersects(e, t)), i = r.pop();
+		return n;
+	}, O = (e, t) => (e = e.replace(h[y.BUILD], ``), f(`comp`, e, t), e = N(e, t), f(`caret`, e), e = j(e, t), f(`tildes`, e), e = F(e, t), f(`xrange`, e), e = L(e, t), f(`stars`, e), e), k = (e) => !e || e.toLowerCase() === `x` || e === `*`, A = (e, t, n) => k(e) && !k(t) || k(t) && n && !k(n), j = (e, t) => e.trim().split(/\s+/).map((e) => M(e, t)).join(` `), M = (e, t) => {
+		let n = t.loose ? h[y.TILDELOOSE] : h[y.TILDE], r = t.includePrerelease ? `-0` : ``;
+		return e.replace(n, (t, n, i, a, o) => {
+			f(`tilde`, e, t, n, i, a, o);
+			let s;
+			return k(n) ? s = `` : k(i) ? s = `>=${n}.0.0${r} <${+n + 1}.0.0-0` : k(a) ? s = `>=${n}.${i}.0${r} <${n}.${+i + 1}.0-0` : o ? (f(`replaceTilde pr`, o), s = `>=${n}.${i}.${a}-${o} <${n}.${+i + 1}.0-0`) : s = `>=${n}.${i}.${a} <${n}.${+i + 1}.0-0`, f(`tilde return`, s), s;
+		});
+	}, N = (e, t) => e.trim().split(/\s+/).map((e) => P(e, t)).join(` `), P = (e, t) => {
+		f(`caret`, e, t);
+		let n = t.loose ? h[y.CARETLOOSE] : h[y.CARET], r = t.includePrerelease ? `-0` : ``;
+		return e.replace(n, (t, n, i, a, o) => {
+			f(`caret`, e, t, n, i, a, o);
+			let s;
+			return k(n) ? s = `` : k(i) ? s = `>=${n}.0.0${r} <${+n + 1}.0.0-0` : k(a) ? s = n === `0` ? `>=${n}.${i}.0${r} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.0${r} <${+n + 1}.0.0-0` : o ? (f(`replaceCaret pr`, o), s = n === `0` ? i === `0` ? `>=${n}.${i}.${a}-${o} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a}-${o} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a}-${o} <${+n + 1}.0.0-0`) : (f(`no pr`), s = n === `0` ? i === `0` ? `>=${n}.${i}.${a} <${n}.${i}.${+a + 1}-0` : `>=${n}.${i}.${a} <${n}.${+i + 1}.0-0` : `>=${n}.${i}.${a} <${+n + 1}.0.0-0`), f(`caret return`, s), s;
+		});
+	}, F = (e, t) => (f(`replaceXRanges`, e, t), e.split(/\s+/).map((e) => I(e, t)).join(` `)), I = (e, t) => {
+		e = e.trim();
+		let n = t.loose ? h[y.XRANGELOOSE] : h[y.XRANGE];
+		return e.replace(n, (n, r, i, a, o, s) => {
+			if (f(`xRange`, e, n, r, i, a, o, s), A(i, a, o)) return e;
+			let c = k(i), l = c || k(a), u = l || k(o), d = u;
+			return r === `=` && d && (r = ``), s = t.includePrerelease ? `-0` : ``, c ? n = r === `>` || r === `<` ? `<0.0.0-0` : `*` : r && d ? (l && (a = 0), o = 0, r === `>` ? (r = `>=`, l ? (i = +i + 1, a = 0, o = 0) : (a = +a + 1, o = 0)) : r === `<=` && (r = `<`, l ? i = +i + 1 : a = +a + 1), r === `<` && (s = `-0`), n = `${r + i}.${a}.${o}${s}`) : l ? n = `>=${i}.0.0${s} <${+i + 1}.0.0-0` : u && (n = `>=${i}.${a}.0${s} <${i}.${+a + 1}.0-0`), f(`xRange return`, n), n;
+		});
+	}, L = (e, t) => (f(`replaceStars`, e, t), e.trim().replace(h[y.STAR], ``)), R = (e, t) => (f(`replaceGTE0`, e, t), e.trim().replace(h[t.includePrerelease ? y.GTE0PRE : y.GTE0], ``)), z = (e) => (t, n, r, i, a, o, s, c, l, u, d, f) => (n = k(r) ? `` : k(i) ? `>=${r}.0.0${e ? `-0` : ``}` : k(a) ? `>=${r}.${i}.0${e ? `-0` : ``}` : o ? `>=${n}` : `>=${n}${e ? `-0` : ``}`, c = k(l) ? `` : k(u) ? `<${+l + 1}.0.0-0` : k(d) ? `<${l}.${+u + 1}.0-0` : f ? `<=${l}.${u}.${d}-${f}` : e ? `<${l}.${u}.${+d + 1}-0` : `<=${c}`, `${n} ${c}`.trim()), B = (e, t, n) => {
+		for (let n = 0; n < e.length; n++) if (!e[n].test(t)) return !1;
+		if (t.prerelease.length && !n.includePrerelease) {
+			for (let n = 0; n < e.length; n++) if (f(e[n].semver), e[n].semver !== d.ANY && e[n].semver.prerelease.length > 0) {
+				let r = e[n].semver;
+				if (r.major === t.major && r.minor === t.minor && r.patch === t.patch) return !0;
+			}
+			return !1;
+		}
+		return !0;
+	};
+}));
+var y = __commonJSMin(((e, t) => {
+	let n = v();
+	t.exports = (e, t, r) => (e = new n(e, r), t = new n(t, r), e.intersects(t, r));
+}));
+var b = __commonJSMin(((e, t) => {
+	let n = v();
+	t.exports = (e, t) => {
+		try {
+			return new n(e, t).range || `*`;
+		} catch {
+			return null;
+		}
+	};
+}));
+export { b, y };
